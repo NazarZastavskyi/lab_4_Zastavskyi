@@ -1,0 +1,212 @@
+#include <iostream>
+#include <cmath>
+#include <limits>
+using namespace std;
+
+// Oholoshennia funktsii
+
+// Vyznachaie nomer koordynatnoi chverti
+int Quarter(double x, double y);
+
+// Obchysliuie diisni koreni kvadratnoho rivniannia
+void QuadraticRoots(double a, double b, double c,
+                    double& x1, double& x2, bool& hasRoots);
+
+// Pereviriaie vvedennia dijsnoho chisla
+bool ReadDouble(double& x, const string& message);
+
+// Rozviazuie odne kvadratne rivniannia
+void SolveEquation(int number);
+
+// Vvodit rik i pereviriaie yoho
+bool InputYear(int& year);
+
+// Obchysliuie nomer stolittia
+int CalculateCentury(int year);
+
+// Vyvodyt rezultat
+void OutputCentury(int year, int century);
+
+// Okremi zavdannia
+void task1();
+void task2();
+void task3();
+
+int main()
+{
+    int choice;
+
+    do
+    {cout << "Laboratorna robota № 4 Zastavskogo Nazara (319 a)" << endl;
+        cout << "\n===== MENU =====" << endl;
+        cout << "1 - Proc33" << endl;
+        cout << "2 - Proc23" << endl;
+        cout << "3 - Integer30" << endl;
+        cout << "0 - Vykhid" << endl;
+        cout << "Vyberit zavdannia: ";
+
+        if (!(cin >> choice))
+        {
+            cout << "Pomylka! Vvedit tsile chyslo." << endl;
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            continue;
+        }
+
+        switch (choice)
+        {
+            case 1: task1(); break;
+            case 2: task2(); break;
+            case 3: task3(); break;
+            case 0: cout << "Zavershennia roboty." << endl; break;
+            default: cout << "Takogo punktu menu nemaie!" << endl;
+        }
+
+    } while (choice != 0);
+
+    return 0;
+}
+
+// Proc33: vyznachennia koordynatnykh chvertei
+int Quarter(double x, double y)
+{
+    if (x > 0 && y > 0) return 1;
+    if (x < 0 && y > 0) return 2;
+    if (x < 0 && y < 0) return 3;
+    return 4;
+}
+
+void task1()
+{
+    double x1, y1, x2, y2, x3, y3;
+
+    cout << "\nProc33. Vvedit koordynaty trokh tochok." << endl;
+
+    if (!ReadDouble(x1, "x1: ") || !ReadDouble(y1, "y1: ") ||
+        !ReadDouble(x2, "x2: ") || !ReadDouble(y2, "y2: ") ||
+        !ReadDouble(x3, "x3: ") || !ReadDouble(y3, "y3: "))
+        return;
+
+    // Okremo vyznachaie chvert dlia kozhnoi tochky
+
+    if (x1 == 0 || y1 == 0)
+        cout << "Tochka 1 ne nalezhyt zh organiz chverti." << endl;
+    else
+        cout << "Tochka 1: " << Quarter(x1, y1) << " chvert" << endl;
+
+    if (x2 == 0 || y2 == 0)
+        cout << "Tochka 2 ne nalezhyt zh organiz chverti." << endl;
+    else
+        cout << "Tochka 2: " << Quarter(x2, y2) << " chvert" << endl;
+
+    if (x3 == 0 || y3 == 0)
+        cout << "Tochka 3 ne nalezhyt zh organiz chverti." << endl;
+    else
+        cout << "Tochka 3: " << Quarter(x3, y3) << " chvert" << endl;
+}
+
+// Proc23: obchyslennia koreniv kvadratnoho rivniannia
+void QuadraticRoots(double a, double b, double c,
+                    double& x1, double& x2, bool& hasRoots)
+{
+    double D = b * b - 4 * a * c;
+
+    hasRoots = (D >= 0);
+
+    if (hasRoots)
+    {
+        x1 = (-b + sqrt(D)) / (2 * a);
+        x2 = (-b - sqrt(D)) / (2 * a);
+    }
+}
+
+// Dopomizhna funktsiia dlia vvedennia chysel
+bool ReadDouble(double& x, const string& message)
+{
+    cout << message;
+
+    if (!(cin >> x) || !isfinite(x) || x < -100 || x > 100)
+    {
+        cout << "Pomylka! Vvedit chyslo vid -100 do 100." << endl;
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        return false;
+    }
+
+    return true;
+}
+
+// Vvod koefitsiientiv i rozviazannia rivniannia
+void SolveEquation(int number)
+{
+    double a, b, c, x1 = 0, x2 = 0;
+    bool hasRoots;
+
+    cout << "\nRivniannia " << number << ":" << endl;
+
+    if (!ReadDouble(a, "a = ") ||
+        !ReadDouble(b, "b = ") ||
+        !ReadDouble(c, "c = "))
+        return;
+
+    if (a == 0)
+    {
+        cout << "Pomylka! Koefitsiient a ne mozhe dorivniuvaty nuliu." << endl;
+        return;
+    }
+
+    QuadraticRoots(a, b, c, x1, x2, hasRoots);
+
+    if (hasRoots)
+        cout << "Koreni: x1 = " << x1 << ", x2 = " << x2 << endl;
+    else
+        cout << "Diisnykh koreniv nemaie." << endl;
+}
+
+void task2()
+{
+    cout << "\nProc23. Rozviazannia trokh kvadratnykh rivnian." << endl;
+
+    SolveEquation(1);
+    SolveEquation(2);
+    SolveEquation(3);
+}
+
+// Integer30: vvedennia ta perevirka roku
+bool InputYear(int& year)
+{
+    cout << "\nVvedit rik: ";
+
+    if (!(cin >> year) || year <= 0)
+    {
+        cout << "Pomylka! Rik maie buty dodatnim tsilym chyslom." << endl;
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        return false;
+    }
+
+    return true;
+}
+
+// Obchyslennia nomera stolittia
+int CalculateCentury(int year)
+{
+    return (year - 1) / 100 + 1;
+}
+
+// Vyvedennia rezultatu
+void OutputCentury(int year, int century)
+{
+    cout << "Rik " << year << " nalezhyt do "
+         << century << " stolittia." << endl;
+}
+
+void task3()
+{
+    int year;
+
+    cout << "\nInteger30. Vyznachennia stolittia." << endl;
+
+    if (InputYear(year))
+        OutputCentury(year, CalculateCentury(year));
+}
